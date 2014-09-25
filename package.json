@@ -1,9 +1,11 @@
 {
   "name": "angularjs-helper",
   "main": "./lib/angularjs-helper",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A short description of your package",
-  "activationEvents": ["angularjs-helper:new-feature"],
+  "activationEvents": [
+    "angularjs-helper:new-feature"
+  ],
   "repository": "https://github.com/orlaqp/angularjs-helper.git",
   "license": "MIT",
   "engines": {
