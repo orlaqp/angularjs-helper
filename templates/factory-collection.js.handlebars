@@ -1,0 +1,106 @@
+(function() {
+
+  'use strict';
+
+  var app = angular.module('nova'),
+      factoryId = '{{entityCamelCase}}CollectionFactory';
+
+  app.factory(factoryId, ['config', 'Restangular', '$q', '{{entityCamelCase}}ModelFactory', factory]);
+
+  function factory(config, restangular, $q, {{entityCamelCase}}ModelFactory) {
+
+    var baseUrl = config.endpoints.inventory;
+
+    function {{entity}}Collection() {
+      this._initialize();
+    }
+
+    {{entity}}Collection.prototype = {
+
+      ///////////////////////////////////////////////
+      // Public Methods                            //
+      ///////////////////////////////////////////////
+
+      _cache: [],
+
+      ///////////////////////////////////////////////
+      // Public Methods                            //
+      ///////////////////////////////////////////////
+
+      /**
+      * Search for {{entityHumanizedPlural}}
+      *
+      * @method search
+      **/
+      search: function(payload) {
+        return this._search(payload);
+      },
+      /**
+      * Remove a {{entityHumanized}}
+      *
+      * @method remove
+      **/
+      remove: function({{entityCamelCase}}) {
+        {{entityCamelCase}}.remove().then(function() {
+          _.remove(this._cache, {{entityCamelCase}});
+        });
+      },
+
+      ///////////////////////////////////////////////
+      // Private Methods                           //
+      ///////////////////////////////////////////////
+
+      /**
+      * Initialize {{entityHumanizedPlural}}
+      *
+      * @private
+      * @method _initialize
+      **/
+      _initialize: function() {
+
+      },
+
+
+      ///////////////////////////////////////////////
+      // Server Calls                              //
+      ///////////////////////////////////////////////
+
+      /**
+      * Call server search
+      *
+      * @private
+      * @method _search
+      * @param {payload} search parameters
+      **/
+      _search: function(payload) {
+        var that = this, d = $q.defer();
+
+        restangular.setBaseUrl(baseUrl)
+          .one('{{entityCamelCasePluralized}}')
+          .get(payload).then(function(response) {
+            // wrap the results into {{entity}}'s objects
+            that._cache = [];
+            var promises = _.map(response.results, function(raw{{entity}}) {
+              return new {{entityCamelCase}}ModelFactory.{{entity}}(raw{{entity}}).then(function({{entityCamelCase}}) {
+                that._cache.push({{entityCamelCase}});
+              });
+            });
+            $q.all(that._cache).then(function() {
+              d.resolve({
+                total: response.total,
+                results: that._cache
+              });
+            });
+
+          });
+
+        return d.promise;
+      },
+
+    }
+
+    return {
+      {{entity}}Collection: {{entity}}Collection
+    }
+  }
+})();

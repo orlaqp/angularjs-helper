@@ -1,0 +1,146 @@
+(function() {
+
+  'use strict';
+
+  var app = angular.module('nova'),
+      factoryId = '{{entityCamelCase}}ModelFactory';
+
+  app.factory(factoryId, ['config', 'Restangular', '$q', factory]);
+
+  function factory(config, restangular, $q) {
+
+    var defaultValues = {};
+
+    function {{entity}}Model(parameter) {
+      return this._initialize(parameter);
+    }
+
+    {{entity}}Model.prototype = {
+
+      ///////////////////////////////////////////////
+      // Public Members                            //
+      ///////////////////////////////////////////////
+
+      /**
+      * Save {{entityHumanized}} changes
+      *
+      * @method save
+      **/
+      save: function() {
+        if (this.id) {
+          return this._update{{entity}}();
+        } else {
+          return this._create{{entity}}();
+        }
+      },
+      /**
+      * Remove {{entityHumanized}}
+      *
+      * @method remove
+      **/
+      remove: function() {
+        return this._remove{{entity}}();
+      },
+
+      ///////////////////////////////////////////////
+      // Private Members                           //
+      ///////////////////////////////////////////////
+
+      /**
+      * Defines base end point for the server calls
+      *
+      * @private
+      * @property
+      **/
+      _baseEndpoint: config.endpoints.inventory,
+      /**
+      * Initialize entity
+      *
+      * @private
+      * @method _initialize
+      * @param {parameter} this can be in three different forms: id, object or no parameters (undefined)
+      **/
+      _initialize: function(parameter) {
+        var d = $q.defer(),
+            id = +parameter;
+
+        // If the user pass an integer as parameter then get the {{entityHumanized}} from the server
+        if (id) {
+          this.id = id;
+          this._get{{entity}}ById(this.id).then(function({{entityCamelCase}}) {
+            this.details = {{entityCamelCase}};
+            d.resolve(this);
+          });
+        // if the user pass an object then make get its data and wrap it into the details property
+        } else if (_.isObject(parameter)) {
+          this.details = parameter;
+          // we need to move the id outside the details
+          this.id = parameter.id;
+          delete parameter.id;
+          d.resolve(this);
+        // if it is undefined then create a new object
+        } else if (!parameter) {
+          // initialize default values for a new {{entityCamelCase}}
+          this.details = _.cloneDeep(defaultValues);
+          d.resolve(this);
+        }
+
+        return d.promise;
+      },
+
+      ///////////////////////////////////////////////
+      // Server Calls                              //
+      ///////////////////////////////////////////////
+
+      /**
+      * Retrieve a {{entityCamelCase}} from the server using its id
+      *
+      * @private
+      * @method _get{{entity}}ById
+      **/
+      _get{{entity}}ById: function(id) {
+        return restangular.setBaseUrl(this._baseEndpoint)
+            .one('{{entityCamelCase}}s', id)
+            .get();
+      },
+      /**
+      * Create new {{entityCamelCase}}
+      *
+      * @private
+      * @method _create{{entity}}
+      **/
+      _create{{entity}}: function() {
+        return restangular.setBaseUrl(this._baseEndpoint)
+            .all('{{entityCamelCasePluralized}}')
+            .post(this.details);
+      },
+      /**
+      * Update an existent {{entityCamelCase}}
+      *
+      * @private
+      * @method _update{{entity}}
+      **/
+      _update{{entity}}: function() {
+        return restangular.setBaseUrl(this._baseEndpoint)
+                .one('{{entityCamelCasePluralized}}', this.id)
+                .customPUT(this.details);
+      },
+      /**
+      * Remove {{entityCamelCase}}
+      *
+      * @private
+      * @method _remove{{entity}}
+      **/
+      _remove{{entity}}: function() {
+        return restangular.setBaseUrl(this._baseEndpoint)
+                .one('{{entityCamelCasePluralized}}', this.id)
+                .remove();
+      },
+
+    }
+
+    return {
+      {{entity}}Model : {{entity}}Model
+    }
+  }
+})();
