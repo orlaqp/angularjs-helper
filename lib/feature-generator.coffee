@@ -79,5 +79,5 @@ class FeatureGenerator
       fs.mkdir(featureViewsPath)
 
     name = data.entityDasherized
-    filename = if isCollection then name + '-collection.html' else name + '-model.html'
+    filename = if isCollection then 'collection.html' else 'model.html'
     fs.writeFile(path.join(featureViewsPath, filename), view)
