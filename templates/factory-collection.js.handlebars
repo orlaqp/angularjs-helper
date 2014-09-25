@@ -81,7 +81,7 @@
             // wrap the results into {{entity}}'s objects
             that._cache = [];
             var promises = _.map(response.results, function(raw{{entity}}) {
-              return new {{entityCamelCase}}ModelFactory.{{entity}}(raw{{entity}}).then(function({{entityCamelCase}}) {
+              return new {{entityCamelCase}}ModelFactory.{{entity}}Model(raw{{entity}}).then(function({{entityCamelCase}}) {
                 that._cache.push({{entityCamelCase}});
               });
             });
