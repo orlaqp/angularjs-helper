@@ -5,9 +5,9 @@
   var app = angular.module('nova'),
       controllerId = '{{entityCamelCase}}ModelController';
 
-  app.controller(controllerId, ['$scope', '$state', 'config', 'common', 'events', '{{entityCamelCase}}ModelFactory', controller]);
+  app.controller(controllerId, ['$scope', '$state', '$stateParams', 'config', 'common', 'events', '{{entityCamelCase}}ModelFactory', controller]);
 
-    function controller($scope, $state, config, common, events, {{entityCamelCase}}ModelFactory) {
+    function controller($scope, $state, $stateParams, config, common, events, {{entityCamelCase}}ModelFactory) {
 
     // initialize controller
     _initialize();
