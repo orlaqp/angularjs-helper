@@ -26,7 +26,7 @@ class FeatureGenerator
       entityCamelCasePluralized: inflector.pluralize(inflector.camelize(name, true)),
       entityPlural: inflector.pluralize(inflector.dasherize(name))
       entityDasherized: inflector.dasherize(name)
-      entityHumanized: inflector.humanize(name)
+      entityHumanized: inflector.humanize(name, true)
       entityHumanizedPlural: inflector.humanize(inflector.pluralize(name))
 
     # console.log data

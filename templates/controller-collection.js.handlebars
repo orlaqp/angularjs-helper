@@ -5,9 +5,11 @@
   var app = angular.module('nova'),
       controllerId = '{{entityCamelCase}}CollectionController';
 
-  app.controller(controllerId, ['$scope', '$state', 'config', 'common', 'events', '{{entityCamelCase}}CollectionFactory', controller]);
+  app.controller(controllerId, ['$scope', '$state', 'config', 'common', 'events',
+    '{{entityCamelCase}}States', '{{entityCamelCase}}CollectionFactory', 'ModalFactory', controller]);
 
-    function controller($scope, $state, config, common, events, {{entityCamelCase}}CollectionFactory) {
+    function controller($scope, $state, config, common, events,
+      {{entityCamelCase}}States, {{entityCamelCase}}CollectionFactory, modalFactory) {
 
     // initialize controller
     _initialize();
@@ -21,6 +23,20 @@
     // Scope Methods                             //
     ///////////////////////////////////////////////
 
+    /**
+    * Remove {{entityHumanized}}
+    *
+    * @method remove{{entity}}
+    **/
+    $scope.remove{{entity}} = function({{entityCamelCase}}) {
+      modalFactory.open('Removing {{entityHumanized}}', '', ' Are you sure you want to delete this {{entityHumanized}}?')
+        .then(function() {
+          {{entityCamelCase}}.remove().then(function() {
+          }, function(error) {
+            common.logger.error(error.data.message);
+          });
+        });
+    }
 
     ///////////////////////////////////////////////
     // Private Methods                           //
@@ -43,6 +59,7 @@
     * @method _prepareScope
     **/
     function _prepareScope() {
+      $scope.{{entityCamelCase}}States = {{entityCamelCase}}States;
       $scope.{{entityCamelCase}}Collection = new {{entityCamelCase}}CollectionFactory.{{entity}}Collection();
 
       $scope.{{entityCamelCase}}CollectionTable = {

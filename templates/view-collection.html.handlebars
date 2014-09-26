@@ -13,7 +13,7 @@
       <table id="{{entityDasherized}}-collection-table" nova-table-new>
         <tbody>
           <tr>
-            
+
             <!-- actions column -->
             <td>
               <div class="btn-group">
@@ -21,8 +21,8 @@
                   <i class="nova-cog-2 fa-2x"></i>
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><button>Edit</button></li>
-                  <li><button>Delete</button></li>
+                  <li><a ui-sref="\{{{{entityCamelCase}}States.EDIT}}({ id: item.id })" role="menuitem">Edit</a></li>
+                  <li><a href="javascript:void(0);" ng-click="remove{{entity}}(item)">Delete</a></li>                  
                 </ul>
               </div>
             </td>

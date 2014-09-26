@@ -5,9 +5,9 @@
   var app = angular.module('nova'),
       controllerId = '{{entityCamelCase}}ModelController';
 
-  app.controller(controllerId, ['$scope', '$state', '$stateParams', 'config', 'common', 'events', '{{entityCamelCase}}ModelFactory', controller]);
+  app.controller(controllerId, ['$scope', '$state', '$stateParams', 'config', 'common', 'events', '{{entityCamelCase}}States', '{{entityCamelCase}}ModelFactory', controller]);
 
-    function controller($scope, $state, $stateParams, config, common, events, {{entityCamelCase}}ModelFactory) {
+    function controller($scope, $state, $stateParams, config, common, events, {{entityCamelCase}}States, {{entityCamelCase}}ModelFactory) {
 
     // initialize controller
     _initialize();
@@ -28,7 +28,7 @@
     **/
     $scope.save = function() {
       $scope.{{entityCamelCase}}.save().then(function() {
-        $state.transitionTo('{{entityPlural}}.collection');
+        $state.transitionTo({{entityCamelCase}}States.COLLECTION);
       });
     }
 
@@ -40,7 +40,7 @@
     $scope.cancel = function() {
       modalFactory.open('Discard {{entityHumanized}} changes', '', ' Are you sure you want to discard {{entityHumanized}} changes?')
         .then(function() {
-          $state.transitionTo('{{entityPlural}}.collection');
+          $state.transitionTo({{entityCamelCase}}States.COLLECTION);
         });
     }
 
