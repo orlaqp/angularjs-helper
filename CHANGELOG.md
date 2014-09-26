@@ -9,3 +9,6 @@
 
 ## 0.7.0 - Minor upgrade
 * Include ui state when generating new feature
+
+## 0.7.1
+* Fixed some issues with the generation of factories and controllers
