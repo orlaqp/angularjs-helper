@@ -1,5 +1,7 @@
-# angularjs-helper package
+# Angularjs-Helper package
 
-A short description of your package.
+After developing AngularJS applications for a few months I find myself writing the same code over and over and if it is true is not difficult it is very time consuming an error prone. So I decided to collection the most common practices in the way I develop these applications and put into generators and snippets so i could concentrate in what really matters and stop worrying about a lot repetitive boilerplate across my controllers, factories, views, etc.
 
-![A screenshot of your spankin' package](https://f.cloud.github.com/assets/69169/2290250/c35d867a-a017-11e3-86be-cd7c5bf3ff9b.gif)
+I am by no means an angular expert and I am learning everyday so hopefully what I have included in this package are reasonable practices that other people could use too and contribute.
+
+More is coming soon ....
