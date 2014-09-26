@@ -70,7 +70,7 @@
           this.id = id;
           this._get{{entity}}ById(this.id).then(function({{entityCamelCase}}) {
             that.details = {{entityCamelCase}};
-            d.resolve(this);
+            d.resolve(that);
           });
         // if the user pass an object then make get its data and wrap it into the details property
         } else if (_.isObject(parameter)) {
