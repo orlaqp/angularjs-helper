@@ -28,7 +28,7 @@ class FeatureGenerator
       entityHumanized: inflector.humanize(name)
       entityHumanizedPlural: inflector.humanize(inflector.pluralize(name))
 
-    console.log data
+    # console.log data
 
     templateFiles = @loadTemplates()
 
@@ -37,7 +37,7 @@ class FeatureGenerator
       template = handlebars.compile(templateString)
       templateResult = allowUnsafeNewFunction -> template(data)
       @writeOutputFile(data, templateFile, templateResult)
-      console.log templateFile
+      # console.log templateFile
 
   loadTemplates: ->
     fs.readdirSync(templatesPath)
@@ -55,29 +55,41 @@ class FeatureGenerator
       isCollection = templateName.indexOf('-collection') != -1
       @writeViewFile(data, isCollection, templateResult)
 
+
   writeControllerFile: (data, isCollection, controller) ->
     featureControllersPath = path.join(controllersPath, data.entityPlural)
-    if (!fs.existsSync(featureControllersPath))
-      fs.mkdir(featureControllersPath)
-
     name = data.entityDasherized
     filename = if isCollection then name + '-collection-controller.js' else name + '-model-controller.js'
-    fs.writeFile(path.join(featureControllersPath, filename), controller)
+    @writeFile(path.join(featureControllersPath, filename), controller)
 
   writeFactoryFile: (data, isCollection, factory) ->
     featureFactoriesPath = path.join(factoriesPath, data.entityPlural)
-    if (!fs.existsSync(featureFactoriesPath))
-      fs.mkdir(featureFactoriesPath)
-
     name = data.entityDasherized
     filename = if isCollection then name + '-collection-factory.js' else name + '-model-factory.js'
-    fs.writeFile(path.join(featureFactoriesPath, filename), factory)
+    @writeFile(path.join(featureFactoriesPath, filename), factory)
 
   writeViewFile: (data, isCollection, view) ->
     featureViewsPath = path.join(viewsPath, '/screens', data.entityPlural)
-    if (!fs.existsSync(featureViewsPath))
-      fs.mkdir(featureViewsPath)
-
-    name = data.entityDasherized
     filename = if isCollection then 'collection.html' else 'model.html'
-    fs.writeFile(path.join(featureViewsPath, filename), view)
+    @writeFile(path.join(featureViewsPath, filename), view)
+
+
+  createParentFolderIfNeeded: (filename) ->
+    dir = path.dirname(filename)
+    if (!fs.existsSync(dir))
+      fs.mkdir(dir)
+
+  writeFile: (filename, content) ->
+    shouldSave = true
+    if fs.existsSync(filename)
+      atom.confirm
+        message: 'Overwrite file?'
+        detailedMessage: "File #{filename} already exist do you want to overwrite it?"
+        buttons:
+          Yes: -> shouldSave = true
+          No: -> shouldSave = false
+
+    @createParentFolderIfNeeded(filename)
+
+    if shouldSave
+      fs.writeFile(filename, content)

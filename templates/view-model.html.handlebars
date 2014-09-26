@@ -1,1 +1,37 @@
-<h1>{{entity}}'s Model </h1>
+<form id="{{entityDasherized}}-details" class="nova-form" ng-submit="save()" novalidate name="{{entityCamelCase}}Form">
+
+  <!-- {{entityDasherized}} -->
+  <div id="{{entityDasherized}}-container" class="container-fluid">
+
+    <!-- For debugging purpose while developing -->
+    <!-- <div class="alert alert-info">
+      {{entityCamelCase}}
+    </div> -->
+
+    <div ng-if="{{entityCamelCase}}Form.$submitted && {{entityCamelCase}}Form.$invalid" class="alert alert-warning">
+      Some errors were found while validating the coupon information. Please fix them and then try again.
+    </div>
+
+    <!-- Page content goes here -->
+
+    <!-- actions -->
+    <div id="actions-section" class="row well">
+      <div class="col-md-2">
+          <dl>
+              <dt></dt>
+              <dd class="text-muted">
+              </dd>
+          </dl>
+      </div>
+
+      <div class="col-md-12">
+        <div class="pull-right">
+          <input type="submit" class="btn btn-primary" value="Save" />
+          <a ng-click="cancel()" id="cancel-btn" class="btn btn-default">Back to Listing</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</form>

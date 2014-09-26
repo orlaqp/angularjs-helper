@@ -20,6 +20,7 @@ class AngularjsHelperView extends View
     @generateBtn.on 'click', =>
       featureName = @filterEditor.getEditor().getText();
       generator.generate(featureName)
+      @destroy()
 
     @cancelBtn.on 'click', =>
       @destroy()
