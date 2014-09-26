@@ -1,0 +1,78 @@
+(function() {
+
+  'use strict';
+
+  var app = angular.module('nova'),
+      constantName = '{{entityCamelCase}}States',
+      base = '{{entityPlural}}',
+      COLLECTION = base + '.collection',
+      NEW = base + '.new',
+      EDIT = base + '.edit';
+
+  app.constant(constantName, {
+      COLLECTION: COLLECTION,
+      NEW: NEW,
+      EDIT: EDIT,
+
+      states: [
+        {
+          name: base,
+          abstract: true,
+          config: {
+            url: '/' + base,
+            template: '<ui-view></ui-view>',
+            data: {
+              settings: {
+                displayName: ''
+              }
+            }
+          }
+        },
+
+        {
+          name: COLLECTION,
+          config: {
+            url: '/listing',
+            templateUrl: '/views/screens/{{entityPlural}}/collection.html',
+            controller: '{{entityCamelCase}}CollectionController',
+            data: {
+              settings: {
+                displayName: 'Listing'
+              }
+            }
+          }
+        },
+
+        {
+          name: NEW,
+          config: {
+            url: '/new',
+            templateUrl: '/views/screens/{{entityPlural}}/model.html',
+            controller: '{{entityCamelCase}}ModelController',
+            data: {
+              settings: {
+                displayName: 'New'
+              }
+            }
+          }
+        },
+
+        {
+          name: EDIT,
+          config: {
+            url: '/:id',
+            templateUrl: '/views/screens/{{entityPlural}}/model.html',
+            controller: '{{entityCamelCase}}ModelController',
+            data: {
+              settings: {
+                displayName: 'Edit'
+              }
+            }
+          }
+        },
+
+      ]
+  });
+
+
+})();

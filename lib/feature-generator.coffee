@@ -12,6 +12,7 @@ class FeatureGenerator
   templatesPath = atom.packages.getPackageDirPaths() + '/angularjs-helper/templates'
   appPath = path.join(atom.project.getPath(), '/app')
   jsPath = path.join(appPath, '/js')
+  statesPath = path.join(jsPath, '/states')
   viewsPath = path.join(appPath, '/views')
   controllersPath = path.join(jsPath, 'controllers')
   factoriesPath = path.join(jsPath, 'factories')
@@ -55,6 +56,8 @@ class FeatureGenerator
       isCollection = templateName.indexOf('-collection') != -1
       @writeViewFile(data, isCollection, templateResult)
 
+    if templateName.indexOf('state') != -1
+      @writeStateFile(data, templateResult)
 
   writeControllerFile: (data, isCollection, controller) ->
     featureControllersPath = path.join(controllersPath, data.entityPlural)
@@ -72,6 +75,9 @@ class FeatureGenerator
     featureViewsPath = path.join(viewsPath, '/screens', data.entityPlural)
     filename = if isCollection then 'collection.html' else 'model.html'
     @writeFile(path.join(featureViewsPath, filename), view)
+
+  writeStateFile: (data, state) ->
+    @writeFile(path.join(statesPath, data.entityPlural + '.js'), state)
 
 
   createParentFolderIfNeeded: (filename) ->
