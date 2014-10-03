@@ -27,7 +27,7 @@
     * @method save
     **/
     $scope.save = function() {
-      $scope.{{entityCamelCase}}.save().then(function() {
+      $scope.{{entityCamelCase}}Model.save().then(function() {
         $state.transitionTo({{entityCamelCase}}States.COLLECTION);
       });
     }
@@ -75,12 +75,12 @@
     **/
     function _resolve{{entity}}() {
       // depending on the state
-      var promise;
+      var promise, Model = {{entityCamelCase}}ModelFactory.{{entity}}Model;
       var state = $state.current;
-      if (state.name === '{{entityPlural}}.new') {
-        promise = new {{entityCamelCase}}ModelFactory.{{entity}}Model();
-      } else if (state.name === '{{entityPlural}}.edit') {
-        promise = new {{entityCamelCase}}ModelFactory.{{entity}}Model($stateParams.id);
+      if (state.name === {{entityCamelCase}}States.NEW) {
+        promise = new Model();
+      } else if (state.name === {{entityCamelCase}}States.EDIT) {
+        promise = new Model($stateParams.id);
       }
 
       promise.then(function({{entityCamelCase}}Model) {
