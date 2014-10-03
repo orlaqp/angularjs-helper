@@ -61,15 +61,16 @@
       * @param {parameter} this can be in three different forms: id, object or no parameters (undefined)
       **/
       _initialize: function(parameter) {
-        var d = $q.defer(),
+        var that = this,
+            d = $q.defer(),
             id = +parameter;
 
         // If the user pass an integer as parameter then get the {{entityHumanized}} from the server
         if (id) {
           this.id = id;
           this._get{{entity}}ById(this.id).then(function({{entityCamelCase}}) {
-            this.details = {{entityCamelCase}};
-            d.resolve(this);
+            that.details = {{entityCamelCase}};
+            d.resolve(that);
           });
         // if the user pass an object then make get its data and wrap it into the details property
         } else if (_.isObject(parameter)) {

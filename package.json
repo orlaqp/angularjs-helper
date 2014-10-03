@@ -1,7 +1,7 @@
 {
   "name": "angularjs-helper",
   "main": "./lib/angularjs-helper",
-  "version": "0.7.0",
+  "version": "0.7.2",
   "description": "The idea behind this page is to offer a collection of useful generators and snippets for AngularJS to speed up the development process. In addition, using this package will help to maintain a standard code structure across the application.",
   "activationEvents": [
     "angularjs-helper:new-feature"
