@@ -80,7 +80,7 @@
           .get(payload).then(function(response) {
             // wrap the results into {{entity}}'s objects
             that._cache = [];
-            var promises = _.map(response.results, function(raw{{entity}}) {
+            var promises = _.map(response.data, function(raw{{entity}}) {
               return new {{entityCamelCase}}ModelFactory.{{entity}}Model(raw{{entity}}).then(function({{entityCamelCase}}) {
                 that._cache.push({{entityCamelCase}});
               });
@@ -88,7 +88,7 @@
             $q.all(that._cache).then(function() {
               d.resolve({
                 total: response.total,
-                results: that._cache
+                data: that._cache
               });
             });
 
