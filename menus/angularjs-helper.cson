@@ -1,12 +1,15 @@
-# See https://atom.io/docs/latest/creating-a-package#menus for more details
-'menu': [
-  {
-    'label': 'Packages'
-    'submenu': [
-      'label': 'angularjs-helper'
-      'submenu': [
-        { 'label': 'Toggle', 'command': 'angularjs-helper:toggle' }
-      ]
-    ]
-  }
-]
+# # See https://atom.io/docs/latest/creating-a-package#menus for more details
+# 'menu': [
+#   {
+#     'label': 'Packages'
+#     'submenu': [
+#       'label': 'angularjs-helper'
+#       'submenu': [
+#         { 'label': 'Toggle', 'command': 'angularjs-helper:toggle' }
+#       ]
+#     ]
+#   }
+# ]
+
+'context-menu':
+    'atom-workspace': [{label: 'AngularJS Helper', command: 'angularjs-helper:toggle'}]
