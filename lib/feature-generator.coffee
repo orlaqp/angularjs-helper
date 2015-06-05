@@ -2,100 +2,102 @@
 
 module.exports =
 class FeatureGenerator
-  _ = require 'lodash'
-  fs = require 'fs'
-  path = require 'path'
-  handlebars = require 'handlebars'
-  inflector = require 'inflection'
+    _ = require 'lodash'
+    fs = require 'fs'
+    path = require 'path'
+    handlebars = require 'handlebars'
+    inflector = require 'inflection'
 
-  # define target paths
-  templatesPath = atom.packages.getPackageDirPaths() + '/angularjs-helper/templates'
-  appPath = path.join(atom.project.getPath(), '/app')
-  jsPath = path.join(appPath, '/js')
-  statesPath = path.join(jsPath, '/states')
-  viewsPath = path.join(appPath, '/views')
-  controllersPath = path.join(jsPath, 'controllers')
-  factoriesPath = path.join(jsPath, 'factories')
+    # define target paths
+    templatesPath = atom.packages.getPackageDirPaths() + '/angularjs-helper/templates'
+    appPath = path.join(atom.project.getPath(), '/app')
+    jsPath = path.join(appPath, '/js')
+    statesPath = path.join(jsPath, '/states')
+    viewsPath = path.join(appPath, '/views')
+    controllersPath = path.join(jsPath, 'controllers')
+    factoriesPath = path.join(jsPath, 'factories')
 
-  console.log appPath
+    console.log appPath
 
-  generate: (name) ->
-    data =
-      entity: inflector.camelize(name)
-      entityCamelCase: inflector.camelize(name, true),
-      entityCamelCasePluralized: inflector.pluralize(inflector.camelize(name, true)),
-      entityPlural: inflector.pluralize(inflector.dasherize(name))
-      entityDasherized: inflector.dasherize(name)
-      entityHumanized: inflector.humanize(name, true)
-      entityHumanizedPlural: inflector.humanize(inflector.pluralize(name))
+    generate: (name) ->
+        return
 
-    # console.log data
+        data =
+            entity: inflector.camelize(name)
+            entityCamelCase: inflector.camelize(name, true),
+            entityCamelCasePluralized: inflector.pluralize(inflector.camelize(name, true)),
+            entityPlural: inflector.pluralize(inflector.dasherize(name))
+            entityDasherized: inflector.dasherize(name)
+            entityHumanized: inflector.humanize(name, true)
+            entityHumanizedPlural: inflector.humanize(inflector.pluralize(name))
 
-    templateFiles = @loadTemplates()
+        # console.log data
 
-    _.forEach templateFiles, (templateFile) =>
-      templateString = fs.readFileSync(path.join(templatesPath, templateFile), 'utf-8');
-      template = handlebars.compile(templateString)
-      templateResult = allowUnsafeNewFunction -> template(data)
-      @writeOutputFile(data, templateFile, templateResult)
-      # console.log templateFile
+        templateFiles = @loadTemplates()
 
-  loadTemplates: ->
-    fs.readdirSync(templatesPath)
+        _.forEach templateFiles, (templateFile) =>
+            templateString = fs.readFileSync(path.join(templatesPath, templateFile), 'utf-8');
+            template = handlebars.compile(templateString)
+            templateResult = allowUnsafeNewFunction -> template(data)
+            @writeOutputFile(data, templateFile, templateResult)
+            # console.log templateFile
 
-  writeOutputFile: (data, templateName, templateResult) ->
-    if templateName.indexOf('controller-') != -1
-      isCollection = templateName.indexOf('-collection') != -1
-      @writeControllerFile(data, isCollection, templateResult)
+    loadTemplates: ->
+        fs.readdirSync(templatesPath)
 
-    if templateName.indexOf('factory-') != -1
-      isCollection = templateName.indexOf('-collection') != -1
-      @writeFactoryFile(data, isCollection, templateResult)
+    writeOutputFile: (data, templateName, templateResult) ->
+        if templateName.indexOf('controller-') != -1
+            isCollection = templateName.indexOf('-collection') != -1
+            @writeControllerFile(data, isCollection, templateResult)
 
-    if templateName.indexOf('view-') != -1
-      isCollection = templateName.indexOf('-collection') != -1
-      @writeViewFile(data, isCollection, templateResult)
+        if templateName.indexOf('factory-') != -1
+            isCollection = templateName.indexOf('-collection') != -1
+            @writeFactoryFile(data, isCollection, templateResult)
 
-    if templateName.indexOf('state') != -1
-      @writeStateFile(data, templateResult)
+        if templateName.indexOf('view-') != -1
+            isCollection = templateName.indexOf('-collection') != -1
+            @writeViewFile(data, isCollection, templateResult)
 
-  writeControllerFile: (data, isCollection, controller) ->
-    featureControllersPath = path.join(controllersPath, data.entityPlural)
-    name = data.entityDasherized
-    filename = if isCollection then name + '-collection-controller.js' else name + '-model-controller.js'
-    @writeFile(path.join(featureControllersPath, filename), controller)
+        if templateName.indexOf('state') != -1
+            @writeStateFile(data, templateResult)
 
-  writeFactoryFile: (data, isCollection, factory) ->
-    featureFactoriesPath = path.join(factoriesPath, data.entityPlural)
-    name = data.entityDasherized
-    filename = if isCollection then name + '-collection-factory.js' else name + '-model-factory.js'
-    @writeFile(path.join(featureFactoriesPath, filename), factory)
+    writeControllerFile: (data, isCollection, controller) ->
+        featureControllersPath = path.join(controllersPath, data.entityPlural)
+        name = data.entityDasherized
+        filename = if isCollection then name + '-collection-controller.js' else name + '-model-controller.js'
+        @writeFile(path.join(featureControllersPath, filename), controller)
 
-  writeViewFile: (data, isCollection, view) ->
-    featureViewsPath = path.join(viewsPath, '/screens', data.entityPlural)
-    filename = if isCollection then 'collection.html' else 'model.html'
-    @writeFile(path.join(featureViewsPath, filename), view)
+    writeFactoryFile: (data, isCollection, factory) ->
+        featureFactoriesPath = path.join(factoriesPath, data.entityPlural)
+        name = data.entityDasherized
+        filename = if isCollection then name + '-collection-factory.js' else name + '-model-factory.js'
+        @writeFile(path.join(featureFactoriesPath, filename), factory)
 
-  writeStateFile: (data, state) ->
-    @writeFile(path.join(statesPath, data.entityPlural + '.js'), state)
+    writeViewFile: (data, isCollection, view) ->
+        featureViewsPath = path.join(viewsPath, '/screens', data.entityPlural)
+        filename = if isCollection then 'collection.html' else 'model.html'
+        @writeFile(path.join(featureViewsPath, filename), view)
+
+    writeStateFile: (data, state) ->
+        @writeFile(path.join(statesPath, data.entityPlural + '.js'), state)
 
 
-  createParentFolderIfNeeded: (filename) ->
-    dir = path.dirname(filename)
-    if (!fs.existsSync(dir))
-      fs.mkdir(dir)
+    createParentFolderIfNeeded: (filename) ->
+        dir = path.dirname(filename)
+        if (!fs.existsSync(dir))
+            fs.mkdir(dir)
 
-  writeFile: (filename, content) ->
-    shouldSave = true
-    if fs.existsSync(filename)
-      atom.confirm
-        message: 'Overwrite file?'
-        detailedMessage: "File #{filename} already exist do you want to overwrite it?"
-        buttons:
-          Yes: -> shouldSave = true
-          No: -> shouldSave = false
+    writeFile: (filename, content) ->
+        shouldSave = true
+        if fs.existsSync(filename)
+            atom.confirm
+                message: 'Overwrite file?'
+                detailedMessage: "File #{filename} already exist do you want to overwrite it?"
+                buttons:
+                    Yes: -> shouldSave = true
+                    No: -> shouldSave = false
 
-    @createParentFolderIfNeeded(filename)
+        @createParentFolderIfNeeded(filename)
 
-    if shouldSave
-      fs.writeFile(filename, content)
+        if shouldSave
+            fs.writeFile(filename, content)

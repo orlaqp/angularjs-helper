@@ -1,13 +1,13 @@
 AngularjsHelperView = require './angularjs-helper-view'
 
 module.exports =
-  angularjsHelperView: null
+    angularjsHelperView: null
 
-  activate: (state) ->
-    @angularjsHelperView = new AngularjsHelperView(state.angularjsHelperViewState)
+    activate: (state) ->
+        @angularjsHelperView = new AngularjsHelperView(state.angularjsHelperViewState)
 
-  deactivate: ->
-    @angularjsHelperView.destroy()
+    deactivate: ->
+        @angularjsHelperView.destroy()
 
-  serialize: ->
-    angularjsHelperViewState: @angularjsHelperView.serialize()
+    serialize: ->
+        angularjsHelperViewState: @angularjsHelperView.serialize()
