@@ -1,4 +1,4 @@
-{WorkspaceView} = require 'atom'
+{WorkspaceView} = require 'atom-space-pen-views'
 AngularjsHelper = require '../lib/angularjs-helper'
 
 # Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.

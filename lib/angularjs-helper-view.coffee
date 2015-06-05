@@ -1,5 +1,5 @@
-{View} = require 'atom'
-{EditorView} = require 'atom'
+{View} = require 'atom-space-pen-views'
+{EditorView} = require 'atom-space-pen-views'
 # FeatureNameEditorView = require './feature-name-editor-view'
 FeatureGenerator = require './feature-generator'
 
