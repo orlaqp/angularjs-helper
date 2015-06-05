@@ -1,41 +1,39 @@
 {View, TextEditorView} = require 'atom-space-pen-views'
-{FeatureGenerator} = require './feature-generator'
+FeatureGenerator = require './feature-generator'
 
 module.exports =
 class AngularjsHelperView extends View
-  @content: ->
-    @div class: 'angularjs-helper overlay from-top', =>
-      @div class: "message", =>
-        @subview 'filterEditor', new TextEditorView(placeholderText: 'enter feature name', mini: true)
-      @div class: 'actions', =>
-        @button class: 'btn btn-primary', outlet: 'generateBtn', 'Generate'
-        @button class: 'btn btn-danger left-margin', outlet: 'cancelBtn', 'Cancel'
+    @content: ->
+        @div class: 'angularjs-helper overlay from-top', =>
+            @div class: "message", =>
+                @subview 'filterEditor', new TextEditorView(placeholderText: 'enter feature name', mini: true)
+            @div class: 'actions', =>
+                @button class: 'btn btn-primary', click: 'generateFeature', 'Generate'
+                @button class: 'btn btn-danger left-margin', click: 'toggle', 'Cancel'
 
 
-  initialize: (serializeState) ->
-    generator = new FeatureGenerator()
-    atom.workspaceView.command "angularjs-helper:new-feature", => @newFeature()
+    initialize: (serializeState) ->
+        atom.commands.add 'atom-text-editor',
+            'angularjs-helper:new-feature': => @toggle()
 
-    @generateBtn.on 'click', =>
-      featureName = @filterEditor.getEditor().getText();
-      generator.generate(featureName)
-      @destroy()
+    generateFeature: ->
+        featureName = @filterEditor.getText();
 
-    @cancelBtn.on 'click', =>
-      @destroy()
+        generator = new FeatureGenerator()
+        generator.generate(featureName)
+
+        @toggle()
 
 
+    toggle: ->
+        if @panel?.isVisible()
+          @hide()
+        else
+          @show()
 
-  # Returns an object that can be retrieved when package is activated
-  serialize: ->
+    show: ->
+        @panel ?= atom.workspace.addModalPanel(item: this)
+        @panel.show()
 
-  # Tear down any state and detach
-  destroy: ->
-    @detach()
-
-  newFeature: ->
-    # console.log "Angularjs helper new feature was toggle"
-    if @hasParent()
-      @detach()
-    else
-      atom.workspaceView.append(this)
+    hide: ->
+        @panel?.hide()
